@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>2% Daily Growth Table</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f4f4f4;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid #ddd;
+      text-align: center;
+    }
+    th {
+      background-color: #4CAF50;
+      color: white;
+    }
+    tr:hover {
+      background-color: #f1f1f1;
+    }
+    .balance-display {
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+    .success {
+      background-color: #d4edda !important;
+    }
+  </style>
+</head>
+<body>
+
+<h2>2% Daily Growth Table</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Day</th>
+      <th>Amount (₹)</th>
+    </tr>
+  </thead>
+  <tbody id="balanceTable"></tbody>
+</table>
+
+<div class="balance-display" id="balance">Balance: ₹0.00</div>
+
+<script>
+  const balanceData = [];
+  let amount = 500;
+  let day = 0;
+  while (amount <= 25000) {
+    balanceData.push({ day: day, amount: parseFloat(amount.toFixed(2)) });
+    amount *= 1.02;
+    day++;
+  }
+
+  const completedDays = [];
+
+  function populateTable() {
+    const tableBody = document.getElementById('balanceTable');
+    balanceData.forEach((entry, index) => {
+      const row = document.createElement('tr');
+      row.innerHTML = `<td>${entry.day}</td><td>₹${entry.amount.toFixed(2)}</td>`;
+      if (completedDays.includes(index)) {
+        row.classList.add('success');
+      }
+      row.addEventListener('click', () => updateBalance(index, row));
+      tableBody.appendChild(row);
+    });
+    document.getElementById('balance').innerText = `Balance: ₹0.00`;
+  }
+
+  function updateBalance(index, row) {
+    if (!row.classList.contains('success')) {
+      const clickedAmount = balanceData[index].amount;
+      document.getElementById('balance').innerText = `Balance: ₹${clickedAmount.toFixed(2)}`;
+      row.classList.add('success');
+    } else {
+      document.getElementById('balance').innerText = `Balance: ₹0.00`;
+      row.classList.remove('success');
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', populateTable);
+</script>
+
+</body>
+</html>
